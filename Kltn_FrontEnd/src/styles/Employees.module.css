@@ -1,0 +1,25 @@
+.pageTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.tableSection {
+    width: 1000px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.cellWidth100px {
+    max-width: 100px;
+    min-width: 100px;
+}
+
+.cellWidth200px {
+    max-width: 200px;
+    min-width: 200px;
+}
+
+.searchSection {
+    width: 500px;
+}

@@ -1,0 +1,64 @@
+.signInForm {
+    border: 1px solid #000000;
+    background-color: white;
+    padding: 30px 50px;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    color: #212A4D;
+    margin-bottom: 20px;
+}
+
+.inputSection {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.inputSection label {
+    font-weight: 600;
+    color: #212A4D;
+}
+
+.inputSection input {
+    padding: 5px;
+    border: 0.5px solid #212A4D;
+}
+
+.showPasswordSection {
+    margin-bottom: 10px;
+}
+
+.showPasswordSection label {
+    margin-left: 15px;
+}
+
+.buttonSection {
+    margin-bottom: 10px;
+}
+
+.buttonSection button {
+    width: 100%;
+    padding: 5px;
+    background-color: #212A4D;
+    color: #ffff;
+    font-weight: 600;
+    border: none;
+}
+
+.buttonSection button:hover {
+    background-color: #545DBA;
+}
+
+.link {
+    color: #212A4D;
+    font-weight: 600;
+}
+
+.link:hover {
+    color: #545DBA;
+    font-weight: 600;
+}

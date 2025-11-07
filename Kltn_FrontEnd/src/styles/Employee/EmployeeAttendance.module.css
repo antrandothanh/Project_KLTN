@@ -1,0 +1,33 @@
+.pageTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.buttonCheckInArea {
+    margin-bottom: 20px;
+}
+
+.buttonCheckIn {
+    padding: 10px;
+    background-color: #00FF0A;
+    color: #000000;
+    border: none;
+    font-weight: 600;
+}
+
+.buttonCheckOut {
+    padding: 10px;
+    background-color: #FF0000;
+    color: #ffff;
+    border: none;
+    font-weight: 600;
+}
+
+.buttonCheckIn:hover {
+    background-color: #27B230;
+}
+
+.buttonCheckOut:hover {
+    background-color: #A82525;
+}
