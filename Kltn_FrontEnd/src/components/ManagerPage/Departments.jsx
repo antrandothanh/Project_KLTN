@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../../styles/Departments.module.css";
-import {IoSearch} from "react-icons/io5"
+import { IoSearch } from "react-icons/io5"
 
 function Departments() {
     return (
@@ -16,8 +16,13 @@ function Departments() {
                     <input type="text" className={`form-control`} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                 </div>
             </div>
-            <div className={`mb-3`}>
-                <button type="button" className={`btn btn-primary btn-sm`}><IoSearch size={20} /> Tìm kiếm</button>
+            <div className={`mb-3 d-flex`}>
+                <div className={`me-2`}>
+                    <button type="button" className={`btn btn-primary btn-sm ${styles.buttonWidth}`}><IoSearch size={20} />Tìm kiếm</button>
+                </div>
+                <div>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#addNewDepartment" className={`btn btn-success btn-sm ${styles.buttonWidth}`}><IoSearch size={20} />Thêm phòng ban</button>
+                </div>
             </div>
             <div></div>
             <div className={`table-responsive ${styles.tableSection}`}>
@@ -62,6 +67,33 @@ function Departments() {
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            {/* Modal */}
+            <div className={`modal fade`} id="addNewDepartment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div className={`modal-dialog modal-dialog-centered modal-dialog-scrollable ${styles.modelStyle}`}>
+                    <div className={`modal-content`}>
+                        <div className={`modal-header`}>
+                            <h1 className={`modal-title fs-5`} id="staticBackdropLabel">Thêm nhân viên</h1>
+                            <button type="button" className={`btn-close`} data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className={`modal-body`}>
+                            <div className={`mb-3`}>
+                                <label for="department" className={`form-label`}>Tên phòng ban</label>
+                                <input type="text" className={`form-control`} id="department" />
+                            </div>
+
+                            <div className={`mb-3`}>
+                                <label for="description" className={`form-label`}>Mô tả</label>
+                                <textarea class="form-control" id="description" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                            <button type="button" class="btn btn-success">Thêm</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

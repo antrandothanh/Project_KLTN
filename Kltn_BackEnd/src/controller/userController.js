@@ -14,21 +14,24 @@ export async function getUsers(req, res) {
 // đăng kí người dùng mới
 export async function createUser(req, res) {
     try {
-        const { employeeCode, fullName, email, position, faceEnrolled, password } = req.body
+        const { employeeCode, fullName, email, dob, address, position, departmentId, faceEnrolled, password } = req.body
         const id = uuidv4()
         const passwordEncrypted = await bcrypt.hash(password, 10)
         const createdAt = new Date()
         await pool.execute(
-            "insert into users (id, employee_code, full_name, email, position, face_enrolled, created_at, password)" 
-            + " values (?, ?, ?, ?, ?, ?, ?, ?)",
-            [id, employeeCode, fullName, email, position, 0, createdAt, passwordEncrypted]
+            "insert into users (id, employee_code, full_name, email, dob, address, position, department_id, face_enrolled, created_at, password_encrypted)" 
+            + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [id, employeeCode, fullName, email, dob, address, position, departmentId, faceEnrolled, createdAt, passwordEncrypted]
         )
         const user = {
             id,
             employeeCode,
             fullName,
             email,
+            dob,
+            address,
             position,
+            departmentId,
             faceEnrolled,
             passwordEncrypted
         }

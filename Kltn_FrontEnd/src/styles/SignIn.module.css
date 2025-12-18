@@ -2,6 +2,8 @@
     border: 1px solid #000000;
     background-color: white;
     padding: 30px 50px;
+    max-width: 450px;
+    min-width: 450px;
 }
 
 .title {
@@ -61,4 +63,11 @@
 .link:hover {
     color: #545DBA;
     font-weight: 600;
+}
+
+.signInError {
+    color: red;
+    margin-bottom: 10px;
+    font-weight: 600;
+    text-align: center;
 }
