@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import styles from "../styles/SignIn.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { IoShieldCheckmark } from "react-icons/io5";
+import { Modal } from "bootstrap";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -25,6 +27,7 @@ function SignIn() {
 
   const handleSignIn = async () => {
     try {
+
       // lấy giá trị từ các trường thông tin.
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
@@ -44,14 +47,13 @@ function SignIn() {
         return;
       }
 
-
       // Nếu trường thông tin hợp lệ -> xoá lỗi cũ
       setSignInError("");
 
       // Gọi API đăng nhập
       const res = await axios.post(`${API}/auth/login`, {
-        "emailInput": email,
-        "passwordInput": password
+        emailInput: email,
+        passwordInput: password,
       });
 
       console.log("Email đã nhập vào:", email);
@@ -62,14 +64,22 @@ function SignIn() {
       const accessToken = res.data.accessToken;
       sessionStorage.setItem("accessToken", accessToken);
 
+      // Hiện modal thông báo đăng nhập thành công
+      const modalEl = document.getElementById("staticBackdrop");
+      const modal = new Modal(modalEl);
+      modal.show();
     } catch (err) {
-      const errorMessage = err.response.data.message
+      const errorMessage = err.response.data.message;
       console.error("Xảy ra lỗi khi đăng nhập:", errorMessage);
       setSignInError(errorMessage);
     }
 
     //navigate("/manager/")
   };
+
+  const handleNavigate = async () => {
+    navigate("/manager");
+  }
 
   return (
     <div className={styles.signInForm}>
@@ -103,6 +113,46 @@ function SignIn() {
         <a className={styles.link} href="#">
           Ấn vào đây để khôi phục.
         </a>
+      </div>
+
+      {/* Modal */}
+      <div
+        className={`modal fade`}
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div className={`modal-dialog modal-dialog-centered`}>
+          <div className={`modal-content`}>
+            <div className={`modal-header`}>
+              <h1 className="modal-title fs-5" id="staticBackdropLabel">
+                Thông báo
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <IoShieldCheckmark size={20} style={{ color: "green" }} /> Đăng nhập thành công.
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-success"
+                data-bs-dismiss="modal"
+                onClick={handleNavigate}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
