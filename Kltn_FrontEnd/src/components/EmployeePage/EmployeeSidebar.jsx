@@ -3,16 +3,28 @@ import { useNavigate } from "react-router-dom";
 import styles from "../../styles/Sidebar.module.css";
 import { EmployeeSidebarData } from "./EmployeeSidebarData";
 import { IoLogOut } from "react-icons/io5";
+import axios from "axios";
+
+const API = import.meta.env.VITE_API_URL
 
 function EmployeeSidebar() {
     const navigate = useNavigate()
 
-    const handleLogOut = () => {
-        setTimeout(() => {
+    const handleLogOut = async () => {
+        try {
+            // Xoá access token trong session storage
+            sessionStorage.removeItem("accessToken");
+            sessionStorage.removeItem("userId")
+            // Gọi API logout
+            const res = await axios.delete(`${API}/auth/logout`);
+            // Chuyển hướng sang trang đăng nhập
             navigate("/sign-in")
-        }, 300)
+        }
+        catch (err) {
+            console.error("Xảy ra lỗi khi đăng xuất:", err)
+        }
     }
-    
+
     return (
         <div className={styles.Sidebar}>
             <div className={styles.header}>
@@ -53,7 +65,7 @@ function EmployeeSidebar() {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            Bạn có muốn <span style={{color: "red", fontWeight: 600}}>đăng xuất</span>?
+                            Bạn có muốn <span style={{ color: "red", fontWeight: 600 }}>đăng xuất</span>?
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Không!</button>

@@ -2,6 +2,7 @@ import pool from "../config/db.js";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from 'bcrypt';
 
+// Lấy tất cả người dùng
 export async function getUsers(req, res) {
     try {
         const [rows] = await pool.query("select * from users")
@@ -35,7 +36,7 @@ export async function createUser(req, res) {
             faceEnrolled,
             passwordEncrypted
         }
-        res.status(201).json({
+        return res.status(201).json({
             message: "User created successfully",
             user: user
         })

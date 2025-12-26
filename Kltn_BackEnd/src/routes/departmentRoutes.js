@@ -1,8 +1,10 @@
 import express from "express";
-import { createDepartment } from "../controller/departmentController.js";
+import { createDepartment, getAllDepartments } from "../controller/departmentController.js";
+import { authenticateToken } from "../controller/authController.js"
 
 const router = express.Router();
 
-router.post("/", createDepartment);
+router.post("/", authenticateToken, createDepartment);
+router.get("/", authenticateToken, getAllDepartments);
 
 export default router

@@ -53,7 +53,7 @@ export async function login(req, res) {
     // Lưu refresh token vào database.
     await pool.execute(
       "insert into refresh_token_table (id, user_id, refresh_token)" +
-        " values (?, ?, ?)",
+      " values (?, ?, ?)",
       [id, userExisted.id, refreshToken]
     );
 
@@ -61,6 +61,7 @@ export async function login(req, res) {
       message: "Đăng nhập thành công.",
       accessToken: accessToken,
       refreshToken: refreshToken,
+      user: userExisted
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -69,7 +70,7 @@ export async function login(req, res) {
 
 async function generateAccessToken(loginInfo) {
   return jwt.sign(loginInfo, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "15min",
+    expiresIn: "30min",
   });
 }
 
@@ -84,7 +85,9 @@ export async function authenticateToken(req, res, next) {
 
   // kiểm tra token có hợp lệ hay không bằng secret key
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, loginInfo) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.status(403).json({
+      message: "Chưa được xác thực"
+    });
 
     // lưu thông tin giải mã từ token vào req.loginInfo
     req.loginInfo = loginInfo;
@@ -140,5 +143,62 @@ export async function logout(req, res) {
     return res.sendStatus(204);
   } catch (err) {
     return res.status(500).json({ message: err.message });
+  }
+}
+
+
+// Hàm kiểm tra access token còn hạn sử dụng không
+export async function verify(req, res) {
+  try {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) {
+      return res.status(401).json({ message: "Không có token" });
+    }
+
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: "Sai định dạng của token" });
+    }
+
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+    return res.status(200).json({ message: "Token có giá trị" });
+
+  } catch (err) {
+
+    return res.status(401).json({ message: "Token bị hết hạn sử dụng hoặc không có giá trị" });
+
+  }
+}
+
+export async function getRefreshTokenByUserId(req, res) {
+  try {
+    const { userId } = req.body;
+
+    const query = `
+      SELECT refresh_token
+      FROM refresh_token_table
+      WHERE user_id = ?
+    `;
+
+    const [rows] = await pool.query(query, [userId]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        message: "Refresh token không tồn tại"
+      });
+    }
+
+    return res.status(200).json({
+      refreshToken: rows[0].refresh_token
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      message: "Lỗi server",
+      error: err.message
+    });
   }
 }

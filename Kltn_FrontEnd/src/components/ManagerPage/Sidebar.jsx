@@ -14,10 +14,9 @@ function Sidebar() {
         try {
             // Xoá access token trong session storage
             sessionStorage.removeItem("accessToken");
-
+            sessionStorage.removeItem("userId")
             // Gọi API logout
             const res = await axios.delete(`${API}/auth/logout`);
-
             // Chuyển hướng sang trang đăng nhập
             navigate("/sign-in")
         }

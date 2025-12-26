@@ -4,13 +4,18 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { IoShieldCheckmark } from "react-icons/io5";
 import { Modal } from "bootstrap";
+import { jwtDecode } from "jwt-decode";
 
 const API = import.meta.env.VITE_API_URL;
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
   const [signInError, setSignInError] = useState("");
+
+
+  const navigate = useNavigate();
+
+
 
   // Các trường thông tin đăng nhập
   const emailRef = useRef("");
@@ -62,7 +67,12 @@ function SignIn() {
 
       // Lưu access token vào session storage
       const accessToken = res.data.accessToken;
+
+      // Lưu user id vào session storage
+      const user = res.data.user
+      const userId = user.id
       sessionStorage.setItem("accessToken", accessToken);
+      sessionStorage.setItem("userId", userId)
 
       // Hiện modal thông báo đăng nhập thành công
       const modalEl = document.getElementById("staticBackdrop");
@@ -73,12 +83,21 @@ function SignIn() {
       console.error("Xảy ra lỗi khi đăng nhập:", errorMessage);
       setSignInError(errorMessage);
     }
-
-    //navigate("/manager/")
   };
 
   const handleNavigate = async () => {
-    navigate("/manager");
+    // navigate("/manager");
+    // Kiểm tra người dùng đăng nhập có vai trò là gì
+    const accessToken = sessionStorage.getItem("accessToken")
+    const decoded = jwtDecode(accessToken)
+    console.log("decoded:", decoded)
+    const employeeCode = decoded.employeeCode
+    if (employeeCode.includes("ADM")) {
+      navigate("/manager")
+    }
+    else {
+      navigate("/employee")
+    }
   }
 
   return (
@@ -100,7 +119,7 @@ function SignIn() {
           onChange={handleShowPassword}
           id="checkDefault"
         />
-        <label className="form-check-label" for="checkDefault">
+        <label className="form-check-label" htmlFor="checkDefault">
           Hiện mật khẩu.
         </label>
       </div>
